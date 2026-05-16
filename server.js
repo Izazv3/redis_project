@@ -6,6 +6,8 @@ const client = require("./redis_client");
 
 const app = express();
 
+const ratelimiter = require("./middleware/rate_limiter");
+
 // Logger middleware
 app.use((req, res, next) => {
   const start = Date.now();
@@ -20,6 +22,8 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use(ratelimiter);
 
 app.get("/posts", async (req, res) => {
   try {
